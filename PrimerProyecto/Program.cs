@@ -6,233 +6,119 @@ namespace PrimerProyecto
     {
         static void Main(string[] args)
         {
-            if (args.Length > 1 || (args[0] != "longformat" && args[0] != "shortformat"))
+            // utilizo string[] en parametroEntrada por si en algun momento son multiples opciones, seria man sencillo consultarlas con un for  que poner todas las opciones.
+            string[] parametroEntrada = { "longformat" , "shortformat"};
+            Boolean parametroOk = true;
+            
+            if (args.Length > 0 && (args[0] != parametroEntrada[0] && args[0] != parametroEntrada[1]))
             {
-                Console.WriteLine("Error parametro inicial, debe ser unico y de los valores acordados en documentacion ");
-
+                Console.WriteLine("Error parametro inicial {0}, debe ser unico y de los valores acordados en documentacion ", args[0]);
+                parametroOk = false;                
             }
-            else
-            {
-                if (args.Length == 0 || args[0] == "longformat")
+            
+            String valorEntrada = "";
+            int tamañoCorrectoEntrada = 25;
+            DateTime fecha;
+            DateTime hora;
+            float temperatura = 0;
+            float humedad = 0;
+            Boolean entradaOK;
+            string estadoString;
+
+            do
+             {
+                if (!parametroOk) { break; }
+
+                Console.WriteLine("Ingresar informacion");
+                valorEntrada = Console.ReadLine();
+
+                if (valorEntrada.Length != tamañoCorrectoEntrada) {
+                    Console.WriteLine("Error al ingresar informacion, chequear documento funcional");
+                    entradaOK = false;
+                    break;
+                }
+                        
+                entradaOK = true;
+                string fec = valorEntrada.Substring(0, 8);
+                string[] formatFec = { "yyyyMMdd" };
+                string[] formatHora = { "HHMMss" };
+
+                string horastring     = valorEntrada.Substring(8, 6);
+                string temp           = valorEntrada.Substring(14, 3);
+                string humedadString  = valorEntrada.Substring(17, 3);
+                string codigo         = valorEntrada.Substring(20, 4);
+                string estado         = valorEntrada.Substring(24, 1);
+
+                try
                 {
+                 temperatura = float.Parse(temp) / 10;
+                }
+                catch (Exception error)
+                {                
+                 Console.WriteLine(" Temperatura incorrecta: {0}", error.Message);
+                 entradaOK = false;
+                 break;
+                }
 
-                    String valorEntrada = "";
-                    DateTime fecha;
-                    DateTime hora;
-                    float temperatura = 0;
-                    float humedad = 0;
-                    Boolean entradaOK;
-                    string estadoString;
+                try
+                {
+                 humedad = float.Parse(humedadString) / 10;
+                }
+                catch (Exception error)
+                {                  
+                  Console.WriteLine(" Humedad incorrecta: {0}", error.Message);
+                  entradaOK = false;
+                  break;
+                }
 
-                    do
-                    {
-                        Console.WriteLine("Ingresar informacion");
-                        valorEntrada = Console.ReadLine();
-                        if (valorEntrada.Length == 25)
-                        {
-                            entradaOK = true;
-                            String fec = valorEntrada.Substring(0, 8);
-                            string[] formatFec = { "yyyyMMdd" };
-                            string[] formatHora = { "HHMMss" };
-
-                            String horastring = valorEntrada.Substring(8, 6);
-                            String tempent = valorEntrada.Substring(14, 2);
-                            String tempdec = valorEntrada.Substring(16, 1);
-                            String hument = valorEntrada.Substring(17, 2);
-                            String humdec = valorEntrada.Substring(19, 1);
-                            String codigo = valorEntrada.Substring(20, 4);
-                            String estado = valorEntrada.Substring(24, 1);
-
-                            try
-                            {
-                                temperatura = float.Parse(tempent + "," + tempdec);
-                            }
-                            catch (Exception error)
-                            {
-                                //    Console.WriteLine("temperatura ingresada incorrecta");
-                                Console.WriteLine(" Temperatura incorrecta: {0}", error.Message);
-                                entradaOK = false;
-                            }
-                            try
-                            {
-                                humedad = float.Parse(hument + "," + humdec);
-
-                            }
-                            catch (Exception error)
-                            {
-                                //    Console.WriteLine("temperatura ingresada incorrecta");
-                                Console.WriteLine(" Humedad incorrecta: {0}", error.Message);
-                                entradaOK = false;
-
-                            }
-                            if (!DateTime.TryParseExact(fec, formatFec, System.Globalization.CultureInfo.InvariantCulture,
+                if (!DateTime.TryParseExact(fec, formatFec, System.Globalization.CultureInfo.InvariantCulture,
                                           System.Globalization.DateTimeStyles.None,
                                           out fecha))
-                            {
-                                Console.WriteLine("fecha incorrecta {0}", fecha);
-                                entradaOK = false;
-                            }
-
-                            if (!DateTime.TryParseExact(horastring, formatHora, System.Globalization.CultureInfo.InvariantCulture,
-                                          System.Globalization.DateTimeStyles.None,
-                                          out hora))
-                            {
-                                Console.WriteLine("hora incorrecta");
-                                entradaOK = false;
-                            }
-                            if (codigo != "AC1C")
-                            {
-                                Console.WriteLine("Codigo Incorrecto");
-                                entradaOK = false;
-                            }
-                            switch (estado)
-                            {
-                                case "0":
-                                    estadoString = "Activo : NO";
-                                    break;
-                                case "1":
-                                    estadoString = "Activo : SI";
-                                    break;
-                                default:
-                                    estadoString = "Estado Incorrecto";
-                                    Console.WriteLine(estadoString);
-                                    entradaOK = false;
-                                    break;
-
-                            }
-                            if (entradaOK)
-                            {
-                                Console.WriteLine("Fecha del registro: {0}/{1}/{2} ", fecha.ToString("yyyy"), fecha.ToString("MM"), fecha.ToString("dd"));
-                                Console.WriteLine("Hora del registro: {0}hs {1}min {2}seg ", hora.ToString("HH"), hora.ToString("MM"), hora.ToString("ss"));
-                                Console.WriteLine("Temperatura: {0}°", temperatura);
-                                Console.WriteLine("Humedad: {0}% ", humedad);
-                                Console.WriteLine("Codigo: “{0}” ", codigo);
-                                Console.WriteLine(estadoString);
-
-                            }
-                        }
-                        else
-                        {
-                            Console.WriteLine("Error al ingresar informacion, chequear documento funcional");
-                            entradaOK = false;
-                        }
-
-                    } while (!entradaOK);
-
-                }
-                else
                 {
-
-                    if (args[0] == "shortformat")
-                    {
-                        String valorEntrada = "";
-                        DateTime fecha;
-                        DateTime hora;
-                        float temperatura = 0;
-                        float humedad = 0;
-                        Boolean entradaOK;
-                        string estadoString;
-
-                        do
-                        {
-                            Console.WriteLine("Ingresar informacion");
-                            valorEntrada = Console.ReadLine();
-                            if (valorEntrada.Length == 25)
-                            {
-                                entradaOK = true;
-                                String fec = valorEntrada.Substring(0, 8);
-                                string[] formatFec = { "yyyyMMdd" };
-                                string[] formatHora = { "HHMMss" };
-
-                                String horastring = valorEntrada.Substring(8, 6);
-                                String tempent = valorEntrada.Substring(14, 2);
-                                String tempdec = valorEntrada.Substring(16, 1);
-                                String hument = valorEntrada.Substring(17, 2);
-                                String humdec = valorEntrada.Substring(19, 1);
-                                String codigo = valorEntrada.Substring(20, 4);
-                                String estado = valorEntrada.Substring(24, 1);
-
-                                try
-                                {
-                                    temperatura = float.Parse(tempent + "," + tempdec);
-                                }
-                                catch (Exception error)
-                                {
-                                    //    Console.WriteLine("temperatura ingresada incorrecta");
-                                    Console.WriteLine(" Temperatura incorrecta: {0}", error.Message);
-                                    entradaOK = false;
-                                }
-                                try
-                                {
-                                    humedad = float.Parse(hument + "," + humdec);
-
-                                }
-                                catch (Exception error)
-                                {
-                                    //    Console.WriteLine("temperatura ingresada incorrecta");
-                                    Console.WriteLine(" Humedad incorrecta: {0}", error.Message);
-                                    entradaOK = false;
-
-                                }
-                                if (!DateTime.TryParseExact(fec, formatFec, System.Globalization.CultureInfo.InvariantCulture,
-                                             System.Globalization.DateTimeStyles.None,
-                                              out fecha))
-                                {
-                                    Console.WriteLine("fecha incorrecta {0}", fecha);
-                                    entradaOK = false;
-                                }
-                                if (!DateTime.TryParseExact(horastring, formatHora, System.Globalization.CultureInfo.InvariantCulture,
-                                          System.Globalization.DateTimeStyles.None,
-                                          out hora))
-                                {
-                                    Console.WriteLine("hora incorrecta");
-                                    entradaOK = false;
-                                }
-                                if (codigo != "AC1C")
-                                {
-                                    Console.WriteLine("Codigo Incorrecto");
-                                    entradaOK = false;
-                                }
-                                switch (estado)
-                                {
-                                    case "0":
-                                        estadoString = "Activo : NO";
-                                        break;
-                                    case "1":
-                                        estadoString = "Activo : SI";
-                                        break;
-                                    default:
-                                        estadoString = "Estado Incorrecto";
-                                        Console.WriteLine(estadoString);
-                                        entradaOK = false;
-                                        break;
-
-                                }
-                                if (entradaOK)
-                                {
-                                    Console.WriteLine("Fecha/hora del registro: {0}/{1}/{2} {3}:{4}:{5}.{6}  ", fecha.ToString("yyyy"), fecha.ToString("MM"), fecha.ToString("dd")
-                                    , hora.ToString("HH"), hora.ToString("MM"), hora.ToString("ss"), hora.ToString("fff"));
-                                    Console.WriteLine("Temperatura: {0}°", temperatura);
-                                    Console.WriteLine("Humedad: {0}% ", humedad);
-                                    Console.WriteLine("Codigo: “{0}” ", codigo);
-                                    Console.WriteLine(estadoString);
-
-                                }
-                            }
-                            else
-                            {
-                                Console.WriteLine("Error al ingresar informacion, chequear documento funcional");
-                                entradaOK = false;
-                            }
-
-                        } while (!entradaOK);
-
-                    }
-
+                 Console.WriteLine("fecha incorrecta {0}", fecha);
+                 entradaOK = false;
+                 break;
                 }
 
+                if (!DateTime.TryParseExact(horastring, formatHora, System.Globalization.CultureInfo.InvariantCulture,
+                                          System.Globalization.DateTimeStyles.None,
+                                          out hora))
+                {
+                 Console.WriteLine("hora incorrecta");
+                 entradaOK = false;
+                 break;
+                }
+                            
+                switch (estado)
+                {
+                 case "0":
+                   estadoString = "Activo : NO";
+                   break;
+                 case "1":
+                   estadoString = "Activo : SI";
+                   break;
+                 default:
+                   estadoString = "Estado Incorrecto";
+                   Console.WriteLine(estadoString);
+                   entradaOK = false;
+                   break;
+                }
+                            
+                if (args.Length == 0 || args[0] == parametroEntrada[0]) {
+                    Console.WriteLine($"Fecha del registro: {fecha.ToString("yyyy")}/{fecha.ToString("MM")}/{fecha.ToString("dd")}");
+                    Console.WriteLine($"Hora del registro: {hora.ToString("HH")}hs {hora.ToString("MM")}min {hora.ToString("ss")}seg");
+                }
+                else {
+                    Console.WriteLine($"Fecha/Hora del registro: {fecha.ToString("yyyy")}/{fecha.ToString("MM")}/{fecha.ToString("dd")} {hora.ToString("HH")}:{hora.ToString("MM")}:{hora.ToString("ss")}.{hora.ToString("fff")} ");
+                }
 
-            }
+                Console.WriteLine("Temperatura: {0}°", temperatura);
+                Console.WriteLine("Humedad: {0}% ", humedad);
+                Console.WriteLine("Codigo: “{0}” ", codigo);
+                Console.WriteLine(estadoString);
+
+            } while (!entradaOK);  
+     
         }
     }
 }
