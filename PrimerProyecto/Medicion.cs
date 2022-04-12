@@ -4,14 +4,14 @@ using System.Text;
 
 namespace PrimerProyecto
 {
-    class Info
+    class Medicion
     {
         string fechaHora;
         string temperatura;
         string humedad;
         string codigo;
         string estado;       
-        public Info(string campo1, string campo2, string campo3, string campo4, string campo5) { 
+        public Medicion(string campo1, string campo2, string campo3, string campo4, string campo5) { 
        // public void AgregarDatos(string campo1,string campo2,string campo3,string campo4,string campo5) {
             this.fechaHora = campo1;
             this.temperatura = campo2;
