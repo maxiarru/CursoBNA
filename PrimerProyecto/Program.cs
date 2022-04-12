@@ -12,9 +12,8 @@ namespace PrimerProyecto
         static void Main(string[] args)
         {            
             Boolean parametroOk = true;
-            int DIMENSION_MINIMA_PARAMETRO = 0;
             
-            if (args.Length > DIMENSION_MINIMA_PARAMETRO && (args[0] != ParametroEntrada.longformat.ToString() && args[0] !=  ParametroEntrada.shortformat.ToString() ))
+            if (args.Length > 0 && (args[0] != ParametroEntrada.longformat.ToString() && args[0] !=  ParametroEntrada.shortformat.ToString() ))
             {
                 Console.WriteLine($"Error parametro inicial {args[0]}, debe ser unico y de los valores acordados en documentacion ");
                 parametroOk = false;                
@@ -108,7 +107,7 @@ namespace PrimerProyecto
                    break;
                 }
                             
-                if (args.Length == DIMENSION_MINIMA_PARAMETRO || args[0] == ParametroEntrada.longformat.ToString()) {
+                if (args.Length == 0 || args[0] == ParametroEntrada.longformat.ToString()) {
                     Console.WriteLine($"Fecha del registro: {fecha.ToString("yyyy")}/{fecha.ToString("MM")}/{fecha.ToString("dd")}");
                     Console.WriteLine($"Hora del registro: {hora.ToString("HH")}hs {hora.ToString("MM")}min {hora.ToString("ss")}seg");
                 }
