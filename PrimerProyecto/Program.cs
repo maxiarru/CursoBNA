@@ -4,20 +4,24 @@ namespace PrimerProyecto
 {
     class Program
     {
-        static void Main(string[] args)
+        public enum ParametroEntrada
         {
-            // utilizo string[] en parametroEntrada por si en algun momento son multiples opciones, seria man sencillo consultarlas con un for  que poner todas las opciones.
-            string[] parametroEntrada = { "longformat" , "shortformat"};
+            longformat , 
+            shortformat
+        }
+        static void Main(string[] args)
+        {            
             Boolean parametroOk = true;
+            int DIMENSION_MINIMA_PARAMETRO = 0;
             
-            if (args.Length > 0 && (args[0] != parametroEntrada[0] && args[0] != parametroEntrada[1]))
+            if (args.Length > DIMENSION_MINIMA_PARAMETRO && (args[0] != ParametroEntrada.longformat.ToString() && args[0] !=  ParametroEntrada.shortformat.ToString() ))
             {
-                Console.WriteLine("Error parametro inicial {0}, debe ser unico y de los valores acordados en documentacion ", args[0]);
+                Console.WriteLine($"Error parametro inicial {args[0]}, debe ser unico y de los valores acordados en documentacion ");
                 parametroOk = false;                
             }
             
             String valorEntrada = "";
-            int tamañoCorrectoEntrada = 25;
+            int DIMENSION_ENTRADA = 25;
             DateTime fecha;
             DateTime hora;
             float temperatura = 0;
@@ -32,7 +36,7 @@ namespace PrimerProyecto
                 Console.WriteLine("Ingresar informacion");
                 valorEntrada = Console.ReadLine();
 
-                if (valorEntrada.Length != tamañoCorrectoEntrada) {
+                if (valorEntrada.Length != DIMENSION_ENTRADA) {
                     Console.WriteLine("Error al ingresar informacion, chequear documento funcional");
                     entradaOK = false;
                     break;
@@ -75,7 +79,7 @@ namespace PrimerProyecto
                                           System.Globalization.DateTimeStyles.None,
                                           out fecha))
                 {
-                 Console.WriteLine("fecha incorrecta {0}", fecha);
+                 Console.WriteLine($"fecha incorrecta {fecha}");
                  entradaOK = false;
                  break;
                 }
@@ -84,7 +88,7 @@ namespace PrimerProyecto
                                           System.Globalization.DateTimeStyles.None,
                                           out hora))
                 {
-                 Console.WriteLine("hora incorrecta");
+                 Console.WriteLine($"hora incorrecta --> {hora}");
                  entradaOK = false;
                  break;
                 }
@@ -104,7 +108,7 @@ namespace PrimerProyecto
                    break;
                 }
                             
-                if (args.Length == 0 || args[0] == parametroEntrada[0]) {
+                if (args.Length == DIMENSION_MINIMA_PARAMETRO || args[0] == ParametroEntrada.longformat.ToString()) {
                     Console.WriteLine($"Fecha del registro: {fecha.ToString("yyyy")}/{fecha.ToString("MM")}/{fecha.ToString("dd")}");
                     Console.WriteLine($"Hora del registro: {hora.ToString("HH")}hs {hora.ToString("MM")}min {hora.ToString("ss")}seg");
                 }
@@ -112,9 +116,9 @@ namespace PrimerProyecto
                     Console.WriteLine($"Fecha/Hora del registro: {fecha.ToString("yyyy")}/{fecha.ToString("MM")}/{fecha.ToString("dd")} {hora.ToString("HH")}:{hora.ToString("MM")}:{hora.ToString("ss")}.{hora.ToString("fff")} ");
                 }
 
-                Console.WriteLine("Temperatura: {0}°", temperatura);
-                Console.WriteLine("Humedad: {0}% ", humedad);
-                Console.WriteLine("Codigo: “{0}” ", codigo);
+                Console.WriteLine($"Temperatura: {temperatura}°");
+                Console.WriteLine($"Humedad: {humedad}% ");
+                Console.WriteLine($"Codigo: “{codigo}” ");
                 Console.WriteLine(estadoString);
 
             } while (!entradaOK);  
