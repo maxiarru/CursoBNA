@@ -23,8 +23,6 @@ namespace PrimerProyecto
             int DIMENSION_ENTRADA = 25;
             DateTime fecha;
             DateTime hora;
-            float temperatura = 0;
-            float humedad = 0;
             Boolean entradaOK;
             string estadoString;
 
@@ -51,27 +49,19 @@ namespace PrimerProyecto
                 string humedadString  = valorEntrada.Substring(17, 3);
                 string codigo         = valorEntrada.Substring(20, 4);
                 string estado         = valorEntrada.Substring(24, 1);
-
-                try
+              
+                if (!float.TryParse(temp, out float temperatura))
                 {
-                 temperatura = float.Parse(temp) / 10;
-                }
-                catch (Exception error)
-                {                
-                 Console.WriteLine(" Temperatura incorrecta: {0}", error.Message);
-                 entradaOK = false;
-                 break;
+                    Console.WriteLine($"Temperatura incorrecta: {temperatura}");
+                    entradaOK = false;
+                    break;
                 }
 
-                try
+                if (!float.TryParse(humedadString, out float humedad))
                 {
-                 humedad = float.Parse(humedadString) / 10;
-                }
-                catch (Exception error)
-                {                  
-                  Console.WriteLine(" Humedad incorrecta: {0}", error.Message);
-                  entradaOK = false;
-                  break;
+                    Console.WriteLine($"Temperatura incorrecta: {humedad}");
+                    entradaOK = false;
+                    break;
                 }
 
                 if (!DateTime.TryParseExact(fec, formatFec, System.Globalization.CultureInfo.InvariantCulture,
@@ -115,13 +105,14 @@ namespace PrimerProyecto
                     Console.WriteLine($"Fecha/Hora del registro: {fecha.ToString("yyyy")}/{fecha.ToString("MM")}/{fecha.ToString("dd")} {hora.ToString("HH")}:{hora.ToString("MM")}:{hora.ToString("ss")}.{hora.ToString("fff")} ");
                 }
 
+                humedad     /= 10;
+                temperatura /= 10;
                 Console.WriteLine($"Temperatura: {temperatura}°");
                 Console.WriteLine($"Humedad: {humedad}% ");
                 Console.WriteLine($"Codigo: “{codigo}” ");
                 Console.WriteLine(estadoString);
 
-            } while (!entradaOK);  
-     
+            } while (!entradaOK);       
         }
     }
 }
