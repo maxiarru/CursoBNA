@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PrimerProyecto": {
+      "commandName": "Project",
+      "commandLineArgs": "\"C:\\Temp\\entrada.txt\""
+    }
+  }
+}
