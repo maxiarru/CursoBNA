@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections;
+using System.IO;
 using System.Linq;
 
 namespace PrimerProyecto
@@ -18,8 +18,11 @@ namespace PrimerProyecto
             string estadoString;
             int DIMENSION_ENTRADA = 25;
             List<Medicion> listaMediciones = new List<Medicion>();
-                        
-            foreach (string line in System.IO.File.ReadLines(@args[0]))
+            string direccionArchivo = @args[0];
+            // args[1] seria si e short o long format
+            if (args.Length < 1) { Console.WriteLine("no ingreso direccion de ruta"); Environment.Exit(0); }
+            if (!File.Exists(direccionArchivo)){ Console.WriteLine("Direccion de archivo incorrecta"); Environment.Exit(0); }
+            foreach (string line in System.IO.File.ReadLines(direccionArchivo))
             {
                 valorEntrada = line;
                 if (valorEntrada == "" && listaMediciones.Count < 1)
@@ -72,7 +75,7 @@ namespace PrimerProyecto
                 if (!DateTime.TryParseExact(fec, formatFecha, System.Globalization.CultureInfo.InvariantCulture,
                                        System.Globalization.DateTimeStyles.None, out fecha))
                 {
-                    Console.WriteLine("fecha incorrecta {0}", fecha);
+                    Console.WriteLine($"fecha incorrecta {fecha}");
                     errorEntrada = true;
                     continue;
                 }
